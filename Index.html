@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Memory Game</title>
+
+<style>
+body{
+  margin:0;
+  background:linear-gradient(135deg,#1f4037,#99f2c8);
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial;
+}
+
+.game{
+  background:#111;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 0 20px black;
+  color:white;
+}
+
+h2{
+  text-align:center;
+  color:#00ffcc;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,70px);
+  gap:10px;
+  margin-top:15px;
+}
+
+.card{
+  width:70px;
+  height:70px;
+  background:#00ffcc;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:30px;
+  cursor:pointer;
+  border-radius:8px;
+  color:transparent;
+  user-select:none;
+}
+
+.card.open,
+.card.matched{
+  background:#222;
+  color:white;
+  cursor:default;
+}
+
+.info{
+  margin-top:10px;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+  <h2>Memory Game 🧠</h2>
+  <div class="grid" id="grid"></div>
+  <div class="info">
+    <p id="moves">Moves: 0</p>
+    <p id="status"></p>
+  </div>
+</div>
+
+<script>
+const emojis = ["🍎","🍌","🍇","🍓","🍒","🥝","🍍","🍉"];
+let cards = [...emojis, ...emojis].sort(() => 0.5 - Math.random());
+
+const grid = document.getElementById("grid");
+const movesText = document.getElementById("moves");
+const statusText = document.getElementById("status");
+
+let first = null;
+let second = null;
+let lock = false;
+let moves = 0;
+let matched = 0;
+
+cards.forEach(symbol=>{
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerText = symbol;
+
+  card.addEventListener("click",()=>{
+    if(lock || card.classList.contains("open")) return;
+
+    card.classList.add("open");
+
+    if(!first){
+      first = card;
+    } else {
+      second = card;
+      lock = true;
+      moves++;
+      movesText.innerText = "Moves: " + moves;
+
+      if(first.innerText === second.innerText){
+        first.classList.add("matched");
+        second.classList.add("matched");
+        matched += 2;
+        reset();
+
+        if(matched === cards.length){
+          statusText.innerText = "🎉 You Won!";
+        }
+      } else {
+        setTimeout(()=>{
+          first.classList.remove("open");
+          second.classList.remove("open");
+          reset();
+        },800);
+      }
+    }
+  });
+
+  grid.appendChild(card);
+});
+
+function reset(){
+  first = null;
+  second = null;
+  lock = false;
+}
+</script>
+
+</body>
+</html>
