@@ -13,8 +13,8 @@ This project helped me understand:
 
 ## 🎮 Game Preview
 
-![Memory Game Screenshot](screenshot.png)
-![Memory Game Screenshot](screenshot1.png)
+![Memory Game Screenshot](Screenshot.png)
+![Memory Game Screenshot](Screenshot1.png)
 
 ---
 
